@@ -10,10 +10,14 @@ var router = require("./routes/index");
 const session = require("express-session");
 const MongoStore = require("connect-mongo")(session);
 
-var app = express();
-const dbName = "basicAuth";
+// LOAD .env values
+require('dotenv').config();
 
-mongoose.connect(`mongodb://localhost:27017/${dbName}`, {
+
+var app = express();
+
+
+mongoose.connect(  process.env.MONGODB_URI , {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
@@ -31,7 +35,7 @@ app.use(express.static(path.join(__dirname, "public")));
 // SESSION MIDDLEWARE
 app.use(
   session({
-    secret: "basic-auth-secret",
+    secret: process.env.SESSION_SECRET ,
     // cookie: { maxAge: 3600000 * 1 },	// 1 hour
     resave: true,
     saveUninitialized: false,
